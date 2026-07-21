@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>С днём рождения, мамочка!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #fff5f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px 16px 40px;
+    }
+
+    .card {
+      max-width: 480px;
+      width: 100%;
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 48px 48px 32px 32px;
+      box-shadow: 0 20px 40px rgba(255, 105, 135, 0.15), 0 8px 20px rgba(255, 20, 80, 0.08);
+      padding: 28px 24px 32px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ffd9e2;
+      transition: all 0.2s ease;
+    }
+
+    /* Декоративный фон — шарики и узоры */
+    .card::before {
+      content: "🎈🎈🎈";
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 80px;
+      opacity: 0.12;
+      transform: rotate(10deg);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: "✨🌸✨";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      font-size: 60px;
+      opacity: 0.08;
+      transform: rotate(-5deg);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* узор из сердечек и цветов */
+    .pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 10% 20%, #ffb6c9 1px, transparent 1px),
+                        radial-gradient(circle at 90% 80%, #ffb6c9 1px, transparent 1px),
+                        radial-gradient(circle at 30% 70%, #ffb6c9 1px, transparent 1px),
+                        radial-gradient(circle at 70% 30%, #ffb6c9 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* всё содержимое поверх фона */
+    .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ШАПКА */
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed #ffb0c3;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #b3415c;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(255, 150, 180, 0.2);
+      word-break: break-word;
+    }
+
+    .header h1 span {
+      display: inline-block;
+      background: linear-gradient(135deg, #f26b8a, #ff8aa8);
+      padding: 0 12px;
+      border-radius: 40px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(255, 80, 120, 0.2);
+    }
+
+    /* ТЕКСТ ПОЗДРАВЛЕНИЯ (проза) */
+    .poem {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #3d1f2b;
+      background: rgba(255, 240, 244, 0.5);
+      padding: 18px 16px;
+      border-radius: 32px;
+      margin: 16px 0 24px;
+      backdrop-filter: blur(2px);
+      box-shadow: inset 0 1px 4px #ffe2ec;
+      border: 1px solid #ffd9e4;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+    }
+
+    .poem p {
+      margin-bottom: 18px;
+    }
+
+    .poem p:last-child {
+      margin-bottom: 0;
+    }
+
+    .poem strong {
+      color: #b3415c;
+      font-weight: 600;
+    }
+
+    .poem .highlight {
+      background: linear-gradient(120deg, #ffd9e4 0%, #ffd9e4 40%, transparent 80%);
+      padding: 0 6px;
+      border-radius: 12px;
+    }
+
+    /* КНОПКА */
+    .btn-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 8px;
+    }
+
+    .btn {
+      background: linear-gradient(145deg, #ff7b9c, #f25a7a);
+      border: none;
+      padding: 18px 48px;
+      border-radius: 60px;
+      font-size: 24px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 1px;
+      box-shadow: 0 10px 20px rgba(255, 70, 110, 0.3), 0 4px 8px rgba(200, 50, 80, 0.2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ffa5bc;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 5px 12px rgba(255, 70, 110, 0.4);
+      background: linear-gradient(145deg, #f25a7a, #e04466);
+    }
+
+    /* ВТОРАЯ СТРАНИЦА (галерея) — скрыта по умолчанию */
+    .page-two {
+      display: none;
+      margin-top: 20px;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .page-two.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: #b3415c;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: -0.3px;
+      background: rgba(255, 215, 225, 0.3);
+      padding: 8px 14px;
+      border-radius: 60px;
+      display: inline-block;
+      backdrop-filter: blur(2px);
+      border: 1px solid #ffc1d2;
+    }
+
+    .gallery-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    .photo-card {
+      background: #fff0f4;
+      border-radius: 36px;
+      padding: 16px 16px 20px;
+      box-shadow: 0 8px 24px rgba(255, 100, 140, 0.12);
+      border: 1px solid #ffd1de;
+      transition: 0.2s;
+      backdrop-filter: blur(2px);
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #ffe2ec;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #b3415c;
+      background-image: repeating-linear-gradient(45deg, #ffd9e4 0px, #ffd9e4 8px, #ffecf0 8px, #ffecf0 16px);
+      border: 2px dashed #f26b8a;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 28px;
+      display: block;
+    }
+
+    /* Если картинки нет — показываем текст-заглушку */
+    .photo-placeholder .dummy-text {
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 16px;
+      border-radius: 40px;
+      backdrop-filter: blur(2px);
+      border: 1px solid white;
+    }
+
+    .photo-caption {
+      font-size: 20px;
+      font-weight: 500;
+      color: #602b3b;
+      text-align: center;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 40px;
+      backdrop-filter: blur(2px);
+      border: 1px solid #ffbccf;
+      letter-spacing: 0.2px;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 440px) {
+      .card {
+        padding: 20px 16px 24px;
+        border-radius: 32px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .poem {
+        font-size: 18px;
+        padding: 14px 12px;
+      }
+
+      .btn {
+        font-size: 22px;
+        padding: 16px 32px;
+      }
+
+      .gallery-title {
+        font-size: 22px;
+      }
+
+      .photo-caption {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header h1 {
+        font-size: 21px;
+      }
+      .poem {
+        font-size: 16px;
+      }
+      .btn {
+        font-size: 20px;
+        padding: 14px 20px;
+      }
+    }
+
+    /* скрываем вторую страницу до клика */
+    .hidden {
+      display: none;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #b37a88;
+      text-align: center;
+      opacity: 0.7;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="mainCard">
+    <div class="pattern"></div>
+    <div class="content">
+
+      <!-- ПЕРВАЯ СТРАНИЦА -->
+      <div id="pageOne">
+        <div class="header">
+          <h1>🌷 <span>Любимая мамочка</span> 🌷<br>поздравляю с днём рождения!</h1>
+        </div>
+
+        <div class="poem">
+          <p><strong>Мамочка, родная моя…</strong> Я сижу и думаю, как же мне повезло, что ты есть. В этом мире, полном суеты, ты — мой тихий берег, куда я всегда могу приплыть и почувствовать себя в безопасности.</p>
+          <p>Я помню твои руки — тёплые, мягкие, которые гладили меня по голове, когда мне было грустно. Помню твой смех — он звенит у меня в сердце до сих пор. Ты умеешь любить так, что хочется становиться лучше. Ты веришь в меня, даже когда я сам в себя не верю. И это — самый ценный дар.</p>
+          <p>Ты — не просто мама. Ты — мой друг, мой советчик, мой ангел-хранитель. Спасибо тебе за все те ночи, когда ты не спала, чтобы я был сыт и здоров. Спасибо за твою мудрость, которая спасла меня не раз. Спасибо за то, что ты научила меня видеть красоту в простых вещах и не сдаваться, даже когда кажется, что весь мир против меня.</p>
+          <p>Знаешь, я часто ловлю себя на мысли, что ты становишься с каждым годом всё краше. И дело не в морщинках или седине — они лишь добавляют тебе благородства. Дело в твоих глазах: в них столько света, добра и какой-то удивительной юности, что я каждый раз заново влюбляюсь в тебя как в человека.</p>
+          <p>Я хочу, чтобы ты знала: ты — самая лучшая женщина на Земле. И я говорю это не потому, что ты моя мама, а потому что это чистая правда. Ты заслуживаешь всего самого прекрасного — таких же тёплых объятий, такой же заботы и такой же любви, какую ты даришь мне.</p>
+          <p>В этот день я желаю тебе не просто здоровья и счастья — я желаю тебе чувствовать себя нужной, любимой, желанной. Пусть у тебя будет много поводов для улыбки, пусть рядом всегда будут те, кто тебя ценит, и пусть каждый рассвет начинается с ощущения чуда.</p>
+          <p><strong>С днём рождения, моя самая драгоценная мамочка.</strong> Я люблю тебя больше, чем могу выразить словами. ❤️</p>
+        </div>
+
+        <div class="btn-wrapper">
+          <button class="btn" id="magicBtn">Нажми на кнопочку</button>
+        </div>
+      </div>
+
+      <!-- ВТОРАЯ СТРАНИЦА (ГАЛЕРЕЯ) -->
+      <div id="pageTwo" class="page-two">
+        <div style="text-align: center;">
+          <span class="gallery-title">🌸 Наши мгновения 🌸</span>
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          
+          <!-- ФОТО 1 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото1.jpg" alt="Фото 1"> -->
+              <img src="https://wertigo.ru/api/shared_files/a7477ad7-a51b-49ac-9755-93dee09ff9c7/files/a7477ad7-a51b-49ac-9755-93dee09ff9c7/preview">
+            </div>
+            <div class="photo-caption">✨ Ты — моя самая тёплая нежность. Пусть каждый день согревает тебя любовью близких ✨</div>
+          </div>
+
+          <!-- ФОТО 2 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото2.jpg" alt="Фото 2"> -->
+              <img src="https://wertigo.ru/api/shared_files/b2eaaea7-3d87-4490-ae26-51f273a34718/files/b2eaaea7-3d87-4490-ae26-51f273a34718/preview">
+            </div>
+            <div class="photo-caption">🌺 Твоя улыбка — как цветущий сад. Пусть жизнь дарит тебе только яркие мгновения 🌺</div>
+          </div>
+
+          <!-- ФОТО 3 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото3.jpg" alt="Фото 3"> -->
+              <img src="https://wertigo.ru/api/shared_files/7ec7daa8-562d-425c-a589-bf87913b1f30/files/7ec7daa8-562d-425c-a589-bf87913b1f30/preview
+">
+            </div>
+            <div class="photo-caption">💖 Спасибо, что ты есть. Желаю тебе всегда чувствовать себя нужной и любимой 💖</div>
+          </div>
+
+          <!-- ФОТО 4 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото4.jpg" alt="Фото 4"> -->
+              <img src="https://wertigo.ru/api/shared_files/3a9f3a54-5807-4a37-beee-edfecfa88832/files/3a9f3a54-5807-4a37-beee-edfecfa88832/preview
+">
+            </div>
+            <div class="photo-caption">🌈 Пусть каждый твой день будет наполнен радостью и улыбками. Ты этого достойна 🌈</div>
+          </div>
+
+          <!-- ФОТО 5 (добавил для полноты, если у вас 5 фото) -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото5.jpg" alt="Фото 5"> -->
+              <img src="https://wertigo.ru/api/shared_files/f4e8508d-14b7-4357-92f3-d21cdecf0acb/files/f4e8508d-14b7-4357-92f3-d21cdecf0acb/preview">
+            </div>
+            <div class="photo-caption">🌟 Ты — моё вдохновение. Пусть мечты сбываются, а сердце всегда поёт 🌟</div>
+          </div>
+
+          <!-- ФОТО 6 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото6.jpg" alt="Фото 6"> -->
+              <img src="https://wertigo.ru/api/shared_files/7c08bade-7d66-46a0-b9eb-07d70bbdd061/files/7c08bade-7d66-46a0-b9eb-07d70bbdd061/preview">
+            </div>
+            <div class="photo-caption">💐 Обнимаю тебя мысленно. Пусть жизнь будет как весенний сад — цветущей и благоухающей 💐</div>
+          </div>
+
+         <!-- ФОТО 7 -->
+          <div class="photo-card">
+            <div class="photo-placeholder">
+              <!-- ⬇️ ЗАМЕНИТЕ ССЫЛКУ: <img src="https://пример.сайт/фото7.jpg" alt="Фото 7"> -->
+              <img src="https://wertigo.ru/api/shared_files/5244eb1e-5f13-42f9-8b25-31a0772ccecb/files/5244eb1e-5f13-42f9-8b25-31a0772ccecb/preview" alt="Фото 7">
+            </div>
+            <div class="photo-caption">🕊️ Ты — самый дорогой человек. Желаю тебе бесконечного счастья и спокойствия 🕊️</div>
+          </div>
+
+    </div>
+  </div>
+  <div class="footer-note">✨ для самой родной ✨</div>
+
+  <script>
+    (function(){
+      const pageOne = document.getElementById('pageOne');
+      const pageTwo = document.getElementById('pageTwo');
+      const magicBtn = document.getElementById('magicBtn');
+
+      function showPageTwo() {
+        pageOne.style.display = 'none';
+        pageTwo.classList.add('active');
+        const card = document.getElementById('mainCard');
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      magicBtn.addEventListener('click', function(e) {
+        showPageTwo();
+      });
+
+      // Если у вас больше или меньше фото — просто удалите или скопируйте блоки .photo-card
+      // Не забудьте заменить все ссылки на фото!
+    })();
+  </script>
+</body>
+</html>
